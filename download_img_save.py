@@ -7,12 +7,15 @@ def get_img_save(url , filename):
 
 
 from bs4 import BeautifulSoup
-from urllib2 import urlopen
+import urllib2
 import urllib
 
 
 def make_soup(url):
-    html = urlopen(url).read()
+    query = urllib2.Request(url)
+    user_agent = "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 1.1.4322; .NET CLR 1.0.3705)"
+    query.add_header("User-Agent" , user_agent)
+    html = urllib2.urlopen(query)
     return BeautifulSoup(html)
 
 # This gets all the images from the given url and stores in the current directory
