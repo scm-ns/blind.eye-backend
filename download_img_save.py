@@ -9,7 +9,8 @@ def get_img_save(url , filename):
 from bs4 import BeautifulSoup
 import urllib2
 import urllib
-
+import os 
+import json
 
 def make_soup(url):
     query = urllib2.Request(url)
@@ -50,10 +51,10 @@ def get_google_img(query):
 
     original_images = []
     for img  in soup.find_all("div", {"class" : "rg_meta"}):
-        link , Type = json.loads(img.text)["ou"] , json.loads(a.text)["ity"]
+        link , Type = json.loads(img.text)["ou"] , json.loads(img.text)["ity"]
         original_images.append((link , Type))
 
-    print "Num images : " + len(original_images)
+    print "Num images : " , len(original_images)
     
     if not os.path.exists(DIR):
         os.mkdir(DIR)
@@ -65,7 +66,7 @@ def get_google_img(query):
     limit = 10
     count = 0
     for i , (img , Type) in enumerate(original_images):
-        if !(count < limit) :
+        if not (count < limit) :
             break
         count += 1
 
