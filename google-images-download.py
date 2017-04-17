@@ -80,13 +80,8 @@ def _images_get_all_items(page):
 
 ############## Main Program ############
 t0 = time.time()   #start the timer
-
-DIR = "./images"
-
-if not os.path.exists(DIR):
-        os.mkdir(DIR)
-
 #Download Image Links
+
 i= 0
 while i<len(search_keyword):
     items = []
@@ -106,12 +101,16 @@ while i<len(search_keyword):
     #print ("Image Links = "+str(items))
     print ("Total Image Links = "+str(len(items)))
     print ("\n")
-    i = i+1
 
     ## To save imges to the same directory
     # IN this saving process we are just skipping the URL if there is any error
     
     # Create a new directory for this kind of images and store within that directory
+
+    DIR = "./images"
+
+    if not os.path.exists(DIR):
+            os.mkdir(DIR)
 
     DIR = os.path.join(DIR , search_keyword[i])
 
@@ -121,7 +120,9 @@ while i<len(search_keyword):
     # move to new directory to store images there
 
     os.chdir(DIR)
+
  
+    i = i+1
     print ("Starting Download...")
     k=0
     errorCount=0
