@@ -32,3 +32,59 @@ def get_images(url):
         filename = each.split("/")[-1]
         urllib.urlretrieve(each , filename)
     return image_links
+
+
+
+
+# Now get images from google custom search for each query
+def get_google_img(query):
+    image_type ="ActiOn"
+    query = query.split()
+    query = "+".join(query)
+    url = "https://www.google.com/search?q="+query+"tbm=isch"
+    print url
+    DIR = "./images"
+
+    user_agent = "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 1.1.4322; .NET CLR 1.0.3705)"
+    soup = make_soup(url)
+
+    original_images = []
+    for img  in soup.find_all("div", {"class" : "rg_meta"}):
+        link , Type = json.loads(img.text)["ou"] , json.loads(a.text)["ity"]
+        original_images.append((link , Type))
+
+    print "Num images : " + len(original_images)
+    
+    if not os.path.exists(DIR):
+        os.mkdir(DIR)
+    DIR = os.path.join(DIR , query.split()[0])
+
+    if not os.path.exists(DIR):
+        os.mkdir(DIR)
+    
+    limit = 10
+    count = 0
+    for i , (img , Type) in enumerate(original_images):
+        if !(count < limit) :
+            break
+        count += 1
+
+        try:
+            req = urllib2.Request(img , headers= {"User-Agent" : user_agent })
+            raw_img = urllib2.open(req).read()
+
+            cntr = len([i for i in os.listdir(DIR) if image_type in i]) + 1
+            print cntr
+            if len(Type) == 0:
+                f = open(os.path.join(DIR , "_", image_type , "_" + str(cntr) + ".jpg") , "wb")
+            else:
+                f = open(os.path.join(DIR , "_" , image_type + "_" + str(cntr) + "." + Type) , "wb")
+            
+            f.write(raw_img)
+            f.close()
+        except Exception as e:
+            print "could not load : " + img 
+            print e
+
+
+get_google_img("car")
