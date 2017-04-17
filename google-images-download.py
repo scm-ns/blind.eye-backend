@@ -73,13 +73,18 @@ def _images_get_all_items(page):
             break
         else:
             items.append(item)      #Append all the links in the list named 'Links'
-            time.sleep(0.1)        #Timer could be used to slow down the request for image downloads
+            #time.sleep(0.1)        #Timer could be used to slow down the request for image downloads
             page = page[end_content:]
     return items
 
 
 ############## Main Program ############
 t0 = time.time()   #start the timer
+
+DIR = "./images"
+
+if not os.path.exists(DIR):
+        os.mkdir(DIR)
 
 #Download Image Links
 i= 0
@@ -105,18 +110,32 @@ while i<len(search_keyword):
 
     ## To save imges to the same directory
     # IN this saving process we are just skipping the URL if there is any error
+    
+    # Create a new directory for this kind of images and store within that directory
 
+    DIR = os.path.join(DIR , search_keyword[i])
+
+    if not os.path.exists(DIR):
+        os.mkdir(DIR)
+
+    # move to new directory to store images there
+
+    os.chdir(DIR)
+ 
     print ("Starting Download...")
     k=0
     errorCount=0
     while(k<len(items)):
+        if(k > 10):
+            break
+
         from urllib2 import Request,urlopen
         from urllib2 import URLError, HTTPError
 
         try:
             req = Request(items[k], headers={"User-Agent": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.27 Safari/537.17"})
             response = urlopen(req)
-            output_file = open(str(k+1)+".jpg",'wb')
+            output_file = open(search_keyword[i]+"_"+str(k+1)+".jpg",'wb')
             data = response.read()
             output_file.write(data)
             response.close();
@@ -145,12 +164,6 @@ while i<len(search_keyword):
     print("\n")
     print("All are downloaded")
     print("\n"+str(errorCount)+" ----> total Errors")
-
-
-    #This allows you to write all the links into a test file. This text file will be created in the same directory as your code. You can comment out the below 3 lines to stop writing the output to the text file.
-    info = open('output.txt', 'a')        #Open the text file called database.txt
-    info.write(str(i) + ': ' + str(search_keyword[i-1]) + ": " + str(items) + "\n\n\n")         #Write the title of the page
-    info.close()                            #Close the file
 
     items = []
 
