@@ -122,7 +122,6 @@ while i<len(search_keyword):
     os.chdir(DIR)
 
  
-    i = i+1
     print ("Starting Download...")
     k=0
     errorCount=0
@@ -166,6 +165,7 @@ while i<len(search_keyword):
     print("All are downloaded")
     print("\n"+str(errorCount)+" ----> total Errors")
 
+    i = i+1
     items = []
 
 
