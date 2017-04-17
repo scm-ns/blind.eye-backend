@@ -36,7 +36,6 @@ def get_images(url):
 
 
 
-
 # Now get images from google custom search for each query
 def get_google_img(query):
     image_type ="ActiOn"
@@ -48,7 +47,6 @@ def get_google_img(query):
 
     user_agent = "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 1.1.4322; .NET CLR 1.0.3705)"
     soup = make_soup(url)
-
     original_images = []
     for img  in soup.find_all("div", {"class" : "rg_meta"}):
         link , Type = json.loads(img.text)["ou"] , json.loads(img.text)["ity"]
@@ -89,3 +87,11 @@ def get_google_img(query):
 
 
 get_google_img("car")
+
+
+query = "car"
+url = "https://www.google.com/search?q="+query+"tbm=isch"
+get_images(url)
+
+
+
