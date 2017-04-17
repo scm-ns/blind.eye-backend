@@ -82,6 +82,12 @@ def _images_get_all_items(page):
 t0 = time.time()   #start the timer
 #Download Image Links
 
+DIR = "./images"
+
+if not os.path.exists(DIR):
+        os.mkdir(DIR)
+
+
 i= 0
 while i<len(search_keyword):
     items = []
@@ -107,19 +113,17 @@ while i<len(search_keyword):
     
     # Create a new directory for this kind of images and store within that directory
 
-    DIR = "./images"
+    if i != 0 : 
+        os.chdir("../..") # move back to root where images dir is located
 
-    if not os.path.exists(DIR):
-            os.mkdir(DIR)
+    DIR_TEMP = os.path.join(DIR , search_keyword[i])
 
-    DIR = os.path.join(DIR , search_keyword[i])
-
-    if not os.path.exists(DIR):
-        os.mkdir(DIR)
+    if not os.path.exists(DIR_TEMP):
+        os.mkdir(DIR_TEMP)
 
     # move to new directory to store images there
 
-    os.chdir(DIR)
+    os.chdir(DIR_TEMP)
 
  
     print ("Starting Download...")
