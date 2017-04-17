@@ -1,5 +1,9 @@
 #Searching and Downloading Google Images/Image Links
 
+#The MIT License (MIT)
+#Copyright (c) 2015 Hardick Vasa
+#scm-ns 2017 : I just added the ability to store different seach term images by directory
+
 #Import Libraries
 
 import time       #Importing the time library to check the time of code execution
