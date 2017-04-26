@@ -144,7 +144,6 @@ while i<len(search_keyword):
             response.close();
 
             print("completed ====> "+str(k+1))
-            print "\r";
 
             k=k+1;
 
