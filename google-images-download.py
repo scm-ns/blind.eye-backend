@@ -12,16 +12,12 @@ import sys    #Importing the System Library
 import urllib2
 import os
 
-########### Edit From Here ###########
 
 #This list is used to search keywords. You can edit this list to search for google images of your choice. You can simply add and remove elements of the list.
-search_keyword = ['Australia', 'Pyramid of Giza']
+search_keyword = [ "blanket", "waterbottle", "brush" ,  "dustbin", "lamp", "coutch" , "television" , "car" , "mortorcycle" , "bed" , "towel" , "shampoo" , "toilet" , "door" , "chocolate" , "cleaning" , "scissors" , "laptop" , "computer" , "mobilephone" , "paper" , "books" , "computer mouse" , "charger" , "fan"]
 
 #This list is used to further add suffix to your search term. Each element of the list will help you download 100 images. First element is blank which denotes that no suffix is added to the search keyword of the above list. You can edit the list by adding/deleting elements from it.So if the first element of the search_keyword is 'Australia' and the second element of keywords is 'high resolution', then it will search for 'Australia High Resolution'
-keywords = [' high resolution']
-
-########### End of Editing ###########
-
+keywords = ['']
 
 
 
@@ -101,11 +97,10 @@ while i<len(search_keyword):
     search_keywords = search_keyword[i]
     search = search_keywords.replace(' ','%20')
     j = 0
-    while j<len(keywords):
+    while j<len(keywords): # just one key word space
         pure_keyword = keywords[j].replace(' ','%20')
         url = 'https://www.google.com/search?q=' + search + pure_keyword + '&espv=2&biw=1366&bih=667&site=webhp&source=lnms&tbm=isch&sa=X&ei=XosDVaCXD8TasATItgE&ved=0CAcQ_AUoAg'
         raw_html =  (download_page(url))
-        time.sleep(0.1)
         items = items + (_images_get_all_items(raw_html))
         j = j + 1
     #print ("Image Links = "+str(items))
@@ -134,16 +129,16 @@ while i<len(search_keyword):
     k=0
     errorCount=0
     while(k<len(items)):
-        if(k > 10):
-            break
+        #if(k > 10):
+        # break
 
         from urllib2 import Request,urlopen
         from urllib2 import URLError, HTTPError
 
         try:
             req = Request(items[k], headers={"User-Agent": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.27 Safari/537.17"})
-            response = urlopen(req)
-            output_file = open(search_keyword[i]+"_"+str(k+1)+".jpg",'wb')
+            response = urlopen(req, timeout=100)
+            output_file = open(search_keyword[i]+"_"+str(k+1)+".img",'wb')
             data = response.read()
             output_file.write(data)
             response.close();
