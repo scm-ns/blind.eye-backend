@@ -104,15 +104,12 @@ def _parallel_worker(items , keyword ,  start_index , end_index):
             idx = idx + 1;
 
         except IOError:   #If there is any IOError
-            errorCount+=1
             print("IOError on image "+str(k+1))
             idx = idx + 1;
         except HTTPError as e:  #If there is any HTTPError
-            errorCount+=1
             print("HTTPError"+str(k))
             idx = idx + 1;
         except URLError as e:
-            errorCount+=1
             print("URLError "+str(k))
             idx = idx + 1;
 
@@ -189,7 +186,6 @@ while i<len(search_keyword):
 
     print("\n")
     print("All are downloaded")
-    print("\n"+str(errorCount)+" ----> total Errors")
 
     i = i+1
     items = []
