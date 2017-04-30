@@ -12,6 +12,10 @@ import sys    #Importing the System Library
 import urllib2
 import os
 import multiprocessing
+from urllib2 import Request,urlopen
+from urllib2 import URLError, HTTPError
+
+import threading
 
 
 search_keyword = ["dog"]
@@ -83,6 +87,37 @@ def _images_get_all_items(page):
             page = page[end_content:]
     return items
 
+# store images in 
+# set the directory to store the items before call. Store in the current location
+def _parallel_worker(items , keyword ,  start_index , end_index):
+    idx = start_index;
+    while(idx < end_index): 
+        try:
+            req = Request(items[idx], headers={"User-Agent": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.27 Safari/537.17"})
+            response = urlopen(req, timeout=100)
+            output_file = open(str(keyword) +"_"+str(idx+1)+".img",'wb')
+            data = response.read()
+            output_file.write(data)
+            response.close();
+
+            print("completed ====> "+str(idx+1))
+            idx = idx + 1;
+
+        except IOError:   #If there is any IOError
+            errorCount+=1
+            print("IOError on image "+str(k+1))
+            idx = idx + 1;
+        except HTTPError as e:  #If there is any HTTPError
+            errorCount+=1
+            print("HTTPError"+str(k))
+            idx = idx + 1;
+        except URLError as e:
+            errorCount+=1
+            print("URLError "+str(k))
+            idx = idx + 1;
+
+
+
 
 ############## Main Program ############
 t0 = time.time()   #start the timer
@@ -131,7 +166,6 @@ while i<len(search_keyword):
 
     # move to new directory to store images there
     os.chdir(DIR_TEMP)
-
  
     print ("Starting Download...")
     k=0
@@ -140,43 +174,18 @@ while i<len(search_keyword):
     # this is a good place to use different threads. 
     # divide the items between the number of threads avaliable
     num_threads =  multiprocessing.cpu_count()
+    num_items_per_thread = len(items) / num_threads
 
+    threads = []
+    # Distribute work amoung threads
+    for th in range(num_threads):
+        thread = threading.Thread(target = _parallel_worker , args=(items , search_keyword[i] , th*num_items_per_thread , (th + 1)*num_items_per_thread )
+        threads.append(thread)
+        thread.start()
 
-    while(k<len(items)):
-        #if(k > 10):
-        # break
+    for thread in threads:
+        thread.join() # Wait for all threads to complete before going to next search item
 
-        from urllib2 import Request,urlopen
-        from urllib2 import URLError, HTTPError
-
-        try:
-            req = Request(items[k], headers={"User-Agent": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.27 Safari/537.17"})
-            response = urlopen(req, timeout=100)
-            output_file = open(search_keyword[i]+"_"+str(k+1)+".img",'wb')
-            data = response.read()
-            output_file.write(data)
-            response.close();
-
-            print("completed ====> "+str(k+1))
-
-            k=k+1;
-
-        except IOError:   #If there is any IOError
-
-            errorCount+=1
-            print("IOError on image "+str(k+1))
-            k=k+1;
-
-        except HTTPError as e:  #If there is any HTTPError
-
-            errorCount+=1
-            print("HTTPError"+str(k))
-            k=k+1;
-        except URLError as e:
-
-            errorCount+=1
-            print("URLError "+str(k))
-            k=k+1;
 
     print("\n")
     print("All are downloaded")
