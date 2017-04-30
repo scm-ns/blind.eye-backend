@@ -179,7 +179,7 @@ while i<len(search_keyword):
     threads = []
     # Distribute work amoung threads
     for th in range(num_threads):
-        thread = threading.Thread(target = _parallel_worker , args=(items , search_keyword[i] , th*num_items_per_thread , (th + 1)*num_items_per_thread )
+        thread = threading.Thread(target = _parallel_worker , args=(items , search_keyword[i] , th*num_items_per_thread , (th + 1)*num_items_per_thread, ) )
         threads.append(thread)
         thread.start()
 
