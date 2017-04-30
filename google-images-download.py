@@ -13,12 +13,12 @@ import urllib2
 import os
 
 
+search_keyword = ["dog"]
 #This list is used to search keywords. You can edit this list to search for google images of your choice. You can simply add and remove elements of the list.
-search_keyword = [ "blanket", "waterbottle", "brush" ,  "dustbin", "lamp", "coutch" , "television" , "car" , "mortorcycle" , "bed" , "towel" , "shampoo" , "toilet" , "door" , "chocolate" , "cleaning" , "scissors" , "laptop" , "computer" , "mobilephone" , "paper" , "books" , "computer mouse" , "charger" , "fan"]
+#search_keyword = [ "blanket", "waterbottle", "brush" ,  "dustbin", "lamp", "coutch" , "television" , "car" , "mortorcycle" , "bed" , "towel" , "shampoo" , "toilet" , "door" , "chocolate" , "cleaning" , "scissors" , "laptop" , "computer" , "mobilephone" , "paper" , "books" , "computer mouse" , "charger" , "fan"]
 
 #This list is used to further add suffix to your search term. Each element of the list will help you download 100 images. First element is blank which denotes that no suffix is added to the search keyword of the above list. You can edit the list by adding/deleting elements from it.So if the first element of the search_keyword is 'Australia' and the second element of keywords is 'high resolution', then it will search for 'Australia High Resolution'
-keywords = ['']
-
+keywords = ["" , "real" , "natural" ,"real+pictures" , "original" ,"flickr" ]
 
 
 #Downloading entire Web Document (Raw Page Content)
@@ -99,7 +99,7 @@ while i<len(search_keyword):
     j = 0
     while j<len(keywords): # just one key word space
         pure_keyword = keywords[j].replace(' ','%20')
-        url = 'https://www.google.com/search?q=' + search + pure_keyword + '&espv=2&biw=1366&bih=667&site=webhp&source=lnms&tbm=isch&sa=X&ei=XosDVaCXD8TasATItgE&ved=0CAcQ_AUoAg'
+        url = "https://www.google.com/search?as_st=y&tbm=isch&hl=en&as_q="+ search + "+" +  pure_keyword + "&as_epq=&as_oq=&as_eq=&cr=&as_sitesearch=&safe=images&tbs=sur:fc"
         raw_html =  (download_page(url))
         items = items + (_images_get_all_items(raw_html))
         j = j + 1
@@ -119,9 +119,12 @@ while i<len(search_keyword):
 
     if not os.path.exists(DIR_TEMP):
         os.mkdir(DIR_TEMP)
+    else:
+        i = i+1
+        os.chdir(DIR_TEMP) # Move to the existing dir, to take care of line 115
+        continue
 
     # move to new directory to store images there
-
     os.chdir(DIR_TEMP)
 
  
