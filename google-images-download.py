@@ -11,9 +11,15 @@ import sys    #Importing the System Library
 
 import urllib2
 import os
+import multiprocessing
 
 
 search_keyword = ["dog"]
+
+#search_keyword = [ "dog" , "cat" , "clock" , "shelf" , "pan" , "pot" , "kettle" , "cup" , "mug" , "iphone" , "walking cane" , "spectacles" , "waterbottle", "brush" ,  "dustbin", "lamp", "coutch" , "television" , "car" , "mortorcycle" , "bed" , "towel" , "shampoo" , "toilet" , "door" , "chocolate" , "cleaning" , "scissors" , "laptop" , "computer" , "mobilephone" , "paper" , "books" , "computer mouse" , "charger" , "fan"]
+
+
+
 #This list is used to search keywords. You can edit this list to search for google images of your choice. You can simply add and remove elements of the list.
 #search_keyword = [ "blanket", "waterbottle", "brush" ,  "dustbin", "lamp", "coutch" , "television" , "car" , "mortorcycle" , "bed" , "towel" , "shampoo" , "toilet" , "door" , "chocolate" , "cleaning" , "scissors" , "laptop" , "computer" , "mobilephone" , "paper" , "books" , "computer mouse" , "charger" , "fan"]
 
@@ -87,7 +93,6 @@ DIR = "./images"
 if not os.path.exists(DIR):
         os.mkdir(DIR)
 
-
 i= 0
 while i<len(search_keyword):
     items = []
@@ -131,6 +136,12 @@ while i<len(search_keyword):
     print ("Starting Download...")
     k=0
     errorCount=0
+
+    # this is a good place to use different threads. 
+    # divide the items between the number of threads avaliable
+    num_threads =  multiprocessing.cpu_count()
+
+
     while(k<len(items)):
         #if(k > 10):
         # break
